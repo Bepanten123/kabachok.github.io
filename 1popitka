@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя милая визитка</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffcfe0, #ffb6c1, #ff9ebb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #6d4a69;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(168, 90, 135, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, #ff9ebb, #ff6b9c);
+            border-radius: 3px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            color: #ff6b9c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ff9ebb;
+            box-shadow: 0 0 20px rgba(255, 158, 187, 0.5);
+            margin: 0 auto 20px;
+            display: block;
+            animation: float 6s ease-in-out infinite;
+            cursor: pointer;
+        }
+        
+        .bio {
+            background: rgba(255, 225, 230, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            position: relative;
+            animation: fadeIn 1.5s ease-out;
+            cursor: pointer;
+            min-height: 120px;
+        }
+        
+        .bio::before {
+            content: '"';
+            font-size: 60px;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: rgba(255, 158, 187, 0.3);
+            font-family: Georgia, serif;
+        }
+        
+        .bio-text {
+            font-style: italic;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: linear-gradient(to right, #ff9ebb, #ff6b9c);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 156, 0.4);
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+        
+        .link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 156, 0.6);
+            animation: none;
+        }
+        
+        .link i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .counter {
+            text-align: center;
+            font-size: 18px;
+            padding: 15px;
+            background: rgba(255, 225, 230, 0.7);
+            border-radius: 15px;
+            animation: glow 2s infinite alternate;
+        }
+        
+        .counter-number {
+            font-weight: bold;
+            color: #ff6b9c;
+            font-size: 24px;
+            display: inline-block;
+            padding: 0 5px;
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff9ebb;
+            opacity: 0;
+            animation: fall 10s linear infinite;
+        }
+        
+        /* Стили для редактора */
+        .editor-panel {
+            background: rgba(255, 225, 230, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .editor-title {
+            text-align: center;
+            color: #ff6b9c;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #6d4a69;
+        }
+        
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ff9ebb;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ff9ebb, #ff6b9c);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 156, 0.4);
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6b9c;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        
+        /* Анимации */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(255, 158, 187, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 158, 187, 0.8); }
+        }
+        
+        @keyframes fall {
+            0% { 
+                top: -10%; 
+                opacity: 0.5;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% { 
+                top: 100%; 
+                opacity: 0;
+                transform: translateX(100px) rotate(360deg);
+            }
+        }
+        
+        .music-player {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .music-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(to right, #a6c0fe, #f68084);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(166, 192, 254, 0.5);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+        
+        .music-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(166, 192, 254, 0.7);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #9d6b86;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="edit-btn" id="editToggle">
+            <i class="fas fa-pencil-alt"></i>
+        </div>
+        
+        <div class="header">
+            <img src="https://placekitten.com/300/300" alt="Аватар" class="avatar" id="avatarImage">
+            <h1 id="userName">Аня Сказочная</h1>
+        </div>
+        
+        <div class="bio" id="bioSection">
+            <p class="bio-text" id="bioText">Привет! Меня зовут Аня, и я обожаю всё милое и красивое! Занимаюсь творчеством, люблю музыку и аниме. Рада видеть тебя на моей страничке! 💖</p>
+        </div>
+        
+        <div class="links">
+            <a href="#" class="link" id="telegramLink"><i class="fab fa-telegram"></i> <span id="telegramText">Мой Telegram</span></a>
+            <a href="#" class="link" id="instagramLink"><i class="fab fa-instagram"></i> <span id="instagramText">Мой Instagram</span></a>
+            <a href="#" class="link" id="vkLink"><i class="fab fa-vk"></i> <span id="vkText">Моя страница VK</span></a>
+        </div>
+        
+        <div class="music-player">
+            <a href="#" class="music-btn" id="musicLink"><i class="fas fa-music"></i> <span id="musicText">Моя песня</span></a>
+        </div>
+        
+        <div class="counter">
+            <p>Эту страницу посетили <span class="counter-number" id="visitCount">0</span> раз!</p>
+        </div>
+        
+        <div class="editor-panel" id="editorPanel">
+            <div class="editor-title">Редактирование профиля</div>
+            
+            <div class="form-group">
+                <label for="avatarInput">Ссылка на аватарку:</label>
+                <input type="text" id="avatarInput" placeholder="Вставьте URL изображения">
+            </div>
+            
+            <div class="form-group">
+                <label for="nameInput">Ваше имя:</label>
+                <input type="text" id="nameInput" placeholder="Введите ваше имя">
+            </div>
+            
+            <div class="form-group">
+                <label for="bioInput">Ваше био:</label>
+                <textarea id="bioInput" placeholder="Расскажите о себе"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="telegramInput">Telegram ссылка:</label>
+                <input type="text" id="telegramInput" placeholder="https://t.me/ваш_аккаунт">
+            </div>
+            
+            <div class="form-group">
+                <label for="instagramInput">Instagram ссылка:</label>
+                <input type="text" id="instagramInput" placeholder="https://instagram.com/ваш_аккаунт">
+            </div>
+            
+            <div class="form-group">
+                <label for="vkInput">VK ссылка:</label>
+                <input type="text" id="vkInput" placeholder="https://vk.com/ваш_аккаунт">
+            </div>
+            
+            <div class="form-group">
+                <label for="musicInput">Ссылка на песню:</label>
+                <input type="text" id="musicInput" placeholder="Ссылка на вашу музыку">
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn" id="saveBtn">Сохранить изменения</button>
+                <button class="btn" id="cancelBtn" style="background: #9d6b86; margin-left: 10px;">Отмена</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Сделано с 💖 | 2023</p>
+        </div>
+        
+        <div class="hearts" id="hearts"></div>
+    </div>
+
+    <script>
+        // Инициализация данных
+        let userData = {
+            avatar: "https://placekitten.com/300/300",
+            name: "Аня Сказочная",
+            bio: "Привет! Меня зовут Аня, и я обожаю всё милое и красивое! Занимаюсь творчеством, люблю музыку и аниме. Рада видеть тебя на моей страничке! 💖",
+            telegram: "#",
+            instagram: "#",
+            vk: "#",
+            music: "#",
+            telegramText: "Мой Telegram",
+            instagramText: "Мой Instagram",
+            vkText: "Моя страница VK",
+            musicText: "Моя песня"
+        };
+
+        // Загрузка сохраненных данных
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            setupEventListeners();
+            initializeCounter();
+            createHearts();
+        });
+
+        // Загрузка сохраненных данных
+        function loadSavedData() {
+            const savedData = localStorage.getItem('userProfileData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+            }
+            updateUI();
+        }
+
+        // Обновление интерфейса
+        function updateUI() {
+            document.getElementById('avatarImage').src = userData.avatar;
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('bioText').textContent = userData.bio;
+            document.getElementById('telegramLink').href = userData.telegram;
+            document.getElementById('instagramLink').href = userData.instagram;
+            document.getElementById('vkLink').href = userData.vk;
+            document.getElementById('musicLink').href = userData.music;
+            document.getElementById('telegramText').textContent = userData.telegramText;
+            document.getElementById('instagramText').textContent = userData.instagramText;
+            document.getElementById('vkText').textContent = userData.vkText;
+            document.getElementById('musicText').textContent = userData.musicText;
+        }
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Кнопка редактирования
+            document.getElementById('editToggle').addEventListener('click', function() {
+                const editorPanel = document.getElementById('editorPanel');
+                if (editorPanel.style.display === 'block') {
+                    editorPanel.style.display = 'none';
+                } else {
+                    // Заполняем форму текущими данными
+                    document.getElementById('avatarInput').value = userData.avatar;
+                    document.getElementById('nameInput').value = userData.name;
+                    document.getElementById('bioInput').value = userData.bio;
+                    document.getElementById('telegramInput').value = userData.telegram;
+                    document.getElementById('instagramInput').value = userData.instagram;
+                    document.getElementById('vkInput').value = userData.vk;
+                    document.getElementById('musicInput').value = userData.music;
+                    editorPanel.style.display = 'block';
+                }
+            });
+
+            // Кнопка сохранения
+            document.getElementById('saveBtn').addEventListener('click', function() {
+                // Сохраняем данные из формы
+                userData.avatar = document.getElementById('avatarInput').value;
+                userData.name = document.getElementById('nameInput').value;
+                userData.bio = document.getElementById('bioInput').value;
+                userData.telegram = document.getElementById('telegramInput').value;
+                userData.instagram = document.getElementById('instagramInput').value;
+                userData.vk = document.getElementById('vkInput').value;
+                userData.music = document.getElementById('musicInput').value;
+
+                // Сохраняем в localStorage
+                localStorage.setItem('userProfileData', JSON.stringify(userData));
+
+                // Обновляем интерфейс
+                updateUI();
+
+                // Скрываем панель редактора
+                document.getElementById('editorPanel').style.display = 'none';
+                
+                alert('Изменения сохранены!');
+            });
+
+            // Кнопка отмены
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                document.getElementById('editorPanel').style.display = 'none';
+            });
+
+            // Редактирование по клику на элементы
+            document.getElementById('avatarImage').addEventListener('click', function() {
+                document.getElementById('editToggle').click();
+                setTimeout(function() {
+                    document.getElementById('avatarInput').focus();
+                }, 100);
+            });
+
+            document.getElementById('userName').addEventListener('click', function() {
+                document.getElementById('editToggle').click();
+                setTimeout(function() {
+                    document.getElementById('nameInput').focus();
+                }, 100);
+            });
+
+            document.getElementById('bioSection').addEventListener('click', function() {
+                document.getElementById('editToggle').click();
+                setTimeout(function() {
+                    document.getElementById('bioInput').focus();
+                }, 100);
+            });
+        }
+
+        // Счетчик посещений
+        function initializeCounter() {
+            let count = localStorage.getItem('visitCount');
+            if (count === null) {
+                count = 0;
+            } else {
+                count = parseInt(count);
+            }
+            count++;
+            localStorage.setItem('visitCount', count);
+            
+            // Анимация увеличения счетчика
+            animateCounter(0, count, 1500);
+        }
+
+        function animateCounter(start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                document.getElementById('visitCount').textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Создаем падающие сердечки
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartCount = 15;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤';
+                heart.classList.add('heart');
+                
+                // Случайная позиция и задержка
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+    </script>
+</body>
+</html>
